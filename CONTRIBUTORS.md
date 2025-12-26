@@ -40,3 +40,6 @@ This project exists because of your time, effort, and curiosity.
 - **GitHub:** https://github.com/gaurav9479
 - **About:** I am gaurav B.Tech Materials Engineering MNNIT Allahabad i am trying to learn open source contribuion in OPENCODE-25
 
+**Name:** Mani kanta Potla 
+- **GitHub:** https://github.com/MANI8148
+- **About:** I am just interested in this project 
