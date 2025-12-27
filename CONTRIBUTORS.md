@@ -80,3 +80,8 @@ This project exists because of your time, effort, and curiosity.
 - **Name:** Apoorv Mittal
 - **GitHub:** https://github.com/Apoorv012
 - **About:** Third-year B.Tech student in Computer Science. Passionate about Backend development"
+
+- **Name:** Krishna Sikheriya  
+  **GitHub:** https://github.com/Krishna200608  
+  **About:** 3rd Year student at IIIT Allahabad eager to learn full-stack development and open-source contributions.
+
