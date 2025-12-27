@@ -76,3 +76,7 @@ This project exists because of your time, effort, and curiosity.
 - **Name:** Mukut Kumar
 - **GitHub:** https://github.com/MK-codes365
 - **About:** Second-year B.Tech student in Computer Science. Passionate about Full Stack Development and Open Source."
+
+- **Name:** Apoorv Mittal
+- **GitHub:** https://github.com/Apoorv012
+- **About:** Third-year B.Tech student in Computer Science. Passionate about Backend development"
