@@ -136,5 +136,9 @@ This project exists because of your time, effort, and curiosity.
 
 
 - **Name:** Aarav Singh  
-  **GitHub:** https://github.com/aaravsingh-3  
-  **About:** i am from iiita and i am here to learn about open source contributions.
+- **GitHub:** https://github.com/aaravsingh-3  
+- **About:** i am from iiita and i am here to learn about open source contributions.
+  
+- **Name:** Krish Sushil Kinger
+  **GitHub:** https://github.com/KRISHH-33
+  **About:** Mera naam Krish hai aur mujhe Coffee peena bohot pasand hai.
