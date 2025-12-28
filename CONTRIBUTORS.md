@@ -133,3 +133,7 @@ This project exists because of your time, effort, and curiosity.
 - **Name:** Kamakshi Gupta  
 - **GitHub:** https://github.com/kamakshi-gupta  
 - **About:** IT Sophomore at IIIT Allahabad, exploring open source and learn along the way.
+
+- **Name:** Krish Sushil Kinger
+  **GitHub:** https://github.com/KRISHH-33
+  **About:** Mera naam Krish hai aur mujhe Coffee peena bohot pasand hai.
