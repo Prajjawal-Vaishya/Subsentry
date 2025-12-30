@@ -178,3 +178,7 @@ This project exists because of your time, effort, and curiosity.
 - **Name:** Tejinerpal Singh
 - **GitHub:** https://github.com/Tejinder105
 - **About:** CSE sophomore at IIIT Vadoara
+
+- **Name:** Anshdeep Singh
+- **GitHub:** https://github.com/Anshdeep-Singh-9  
+- **About:** I recently watched Vinland Saga!
