@@ -191,6 +191,10 @@ This project exists because of your time, effort, and curiosity.
 - **GitHub:** https://github.com/Humanshere 
 - **About:** IT-BI Second year at IIITA
 
+- **Name:** Utkarsh Pandey  
+- **GitHub:** https://github.com/utkarshp579  
+- **About:** Full-Stack Developer , AI-ML Enthusiast
+
 - **Name:** Yogesh M
 - **GitHub** https://github.com/yogesh4216
 - **About** Computer Science–focused student passionate about AI, software development, and building impactful real world projects.
