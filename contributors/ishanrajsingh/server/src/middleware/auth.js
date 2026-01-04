@@ -1,87 +1,74 @@
+// contributors/ishanrajsingh/server/src/middleware/auth.js
+
 const jwt = require('jsonwebtoken');
+const mongoose = require('mongoose');
 const User = require('../models/User');
 
-// Protect routes middleware
-exports.protect = async (req, res, next) => {
-  let token;
+/**
+ * @desc   Protect routes
+ * @usage  router.use(protect) or router.get('/me', protect, handler)
+ */
+const protect = async (req, res, next) => {
+  try {
+    let token;
 
-  // Check if authorization header exists and starts with 'Bearer'
-  if (
-    req.headers.authorization &&
-    req.headers.authorization.startsWith('Bearer')
-  ) {
-    try {
-      // Extract token from header
-      // Format: "Bearer <token>"
+    // Expect Authorization: Bearer <token>
+    if (
+      req.headers.authorization &&
+      req.headers.authorization.startsWith('Bearer ')
+    ) {
       token = req.headers.authorization.split(' ')[1];
+    }
 
-      // Verify token
-      const decoded = jwt.verify(token, process.env.JWT_SECRET);
-
-      // Get user from token payload and attach to request
-      // Exclude password from user object
-      req.user = await User.findById(decoded.id).select('-password');
-
-      if (!req.user) {
-        return res.status(401).json({
-          success: false,
-          message: 'User not found'
-        });
-      }
-
-      // Check if user is active
-      if (!req.user.isActive) {
-        return res.status(401).json({
-          success: false,
-          message: 'User account is deactivated'
-        });
-      }
-
-      next();
-    } catch (error) {
-      console.error('Auth middleware error:', error.message);
-      
-      // Handle specific JWT errors
-      if (error.name === 'JsonWebTokenError') {
-        return res.status(401).json({
-          success: false,
-          message: 'Invalid token'
-        });
-      }
-      
-      if (error.name === 'TokenExpiredError') {
-        return res.status(401).json({
-          success: false,
-          message: 'Token expired'
-        });
-      }
-
+    if (!token) {
       return res.status(401).json({
         success: false,
-        message: 'Not authorized to access this route'
+        message: 'Not authorized, token missing',
       });
     }
-  }
 
-  // No token provided
-  if (!token) {
+    // Verify token
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+    if (!decoded || !decoded.id) {
+      return res.status(401).json({
+        success: false,
+        message: 'Not authorized, token invalid',
+      });
+    }
+
+    if (!mongoose.Types.ObjectId.isValid(decoded.id)) {
+      return res.status(401).json({
+        success: false,
+        message: 'Not authorized, invalid user id in token',
+      });
+    }
+
+    // Load user and attach to req
+    const user = await User.findById(decoded.id).select('-password');
+
+    if (!user) {
+      return res.status(401).json({
+        success: false,
+        message: 'Not authorized, user not found',
+      });
+    }
+
+    req.user = {
+      id: user._id,
+      email: user.email,
+      name: user.name,
+      // add other safe fields if needed
+    };
+
+    next();
+  } catch (error) {
+    console.error('Auth middleware error:', error);
     return res.status(401).json({
       success: false,
-      message: 'Not authorized, no token provided'
+      message: 'Not authorized, token verification failed',
     });
   }
 };
 
-// Grant access to specific roles
-
-exports.authorize = (...roles) => {
-  return (req, res, next) => {
-    if (!roles.includes(req.user.role)) {
-      return res.status(403).json({
-        success: false,
-        message: `User role '${req.user.role}' is not authorized to access this route`
-      });
-    }
-    next();
-  };
-};
+module.exports = { protect };

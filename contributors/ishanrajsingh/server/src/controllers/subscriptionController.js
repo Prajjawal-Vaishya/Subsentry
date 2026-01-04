@@ -1,4 +1,7 @@
+// contributors/ishanrajsingh/server/src/controllers/subscriptionController.js
+
 const Subscription = require('../models/Subscription');
+const { BILLING_CYCLES } = require('../constants/subscription.constants');
 
 /**
  * @desc    Create new subscription
@@ -7,114 +10,113 @@ const Subscription = require('../models/Subscription');
  */
 exports.createSubscription = async (req, res) => {
   try {
-    const { 
-      name, 
-      amount, 
+    const {
+      name,
+      amount,
       currency,
-      billingCycle, 
-      nextBillingDate, 
+      billingCycle,
+      nextBillingDate,
       category,
       description,
       website,
       reminderEnabled,
-      reminderDays
+      reminderDays,
     } = req.body;
-    
-    // Validate required fields
-    if (!name || !amount || !billingCycle || !nextBillingDate) {
-      return res.status(400).json({ 
+
+    // Basic required fields validation
+    if (!name || amount === undefined || !billingCycle || !nextBillingDate) {
+      return res.status(400).json({
         success: false,
-        message: 'Missing required fields: name, amount, billingCycle, nextBillingDate' 
+        message:
+          'Missing required fields: name, amount, billingCycle, nextBillingDate',
       });
     }
 
-    // Validate amount is positive
     if (amount < 0) {
       return res.status(400).json({
         success: false,
-        message: 'Amount must be a positive number'
+        message: 'Amount must be a positive number',
       });
     }
 
-    // Validate billing cycle
-    const validCycles = ['daily', 'weekly', 'monthly', 'quarterly', 'yearly'];
-    if (!validCycles.includes(billingCycle.toLowerCase())) {
+    const validCycles = Object.values(BILLING_CYCLES);
+    const normalizedCycle = String(billingCycle).toLowerCase();
+
+    if (!validCycles.includes(normalizedCycle)) {
       return res.status(400).json({
         success: false,
-        message: `Invalid billing cycle. Must be one of: ${validCycles.join(', ')}`
+        message: `Invalid billing cycle. Allowed values: ${validCycles.join(
+          ', ',
+        )}`,
       });
     }
 
-    // Validate next billing date is in future
     const nextDate = new Date(nextBillingDate);
-    if (nextDate < new Date()) {
+    if (Number.isNaN(nextDate.getTime())) {
       return res.status(400).json({
         success: false,
-        message: 'Next billing date must be in the future'
+        message: 'Invalid nextBillingDate',
       });
     }
 
-    // Create subscription with authenticated user ID
+    if (!req.user || (!req.user.id && !req.user._id)) {
+      return res.status(401).json({
+        success: false,
+        message: 'User context not found on request',
+      });
+    }
+
     const subscription = await Subscription.create({
-      userId: req.user._id, // From auth middleware
+      userId: req.user.id || req.user._id,
       name,
       amount,
-      currency: currency || 'INR',
-      billingCycle: billingCycle.toLowerCase(),
+      currency,
+      billingCycle: normalizedCycle,
       nextBillingDate: nextDate,
-      category: category || 'Other',
+      category,
       description,
       website,
-      reminderEnabled: reminderEnabled !== undefined ? reminderEnabled : true,
-      reminderDays: reminderDays || 3
+      reminderEnabled:
+        typeof reminderEnabled === 'boolean' ? reminderEnabled : true,
+      reminderDays: reminderDays || 3,
     });
 
-    res.status(201).json({
+    return res.status(201).json({
       success: true,
       message: 'Subscription created successfully',
-      data: subscription
+      data: subscription,
     });
   } catch (error) {
     console.error('Create subscription error:', error);
-    
-    // Handle mongoose validation errors
-    if (error.name === 'ValidationError') {
-      const messages = Object.values(error.errors).map(err => err.message);
-      return res.status(400).json({
-        success: false,
-        message: 'Validation error',
-        errors: messages
-      });
-    }
-
-    res.status(500).json({
+    return res.status(500).json({
       success: false,
       message: 'Server error while creating subscription',
-      error: error.message
+      error: error.message,
     });
   }
 };
 
 /**
- * @desc    Fetch all subscriptions for authenticated user
+ * @desc    Get all subscriptions for authenticated user
  * @route   GET /api/subscriptions
  * @access  Private
  */
 exports.getSubscriptions = async (req, res) => {
   try {
-    // Extract query parameters for filtering
-    const { 
-      status, 
-      category, 
-      billingCycle,
-      sortBy = 'createdAt',
-      order = 'desc'
-    } = req.query;
+    if (!req.user || (!req.user.id && !req.user._id)) {
+      return res.status(401).json({
+        success: false,
+        message: 'User context not found on request',
+      });
+    }
 
-    // Build query - only fetch subscriptions belonging to authenticated user
-    const query = { userId: req.user._id };
+    const { status, category, billingCycle, sortBy = 'createdAt', order = 'desc' } =
+      req.query;
 
-    // Add optional filters
+    const query = {
+      userId: req.user.id || req.user._id,
+    };
+
     if (status) {
       query.status = status;
     }
@@ -122,77 +124,28 @@ exports.getSubscriptions = async (req, res) => {
       query.category = category;
     }
     if (billingCycle) {
-      query.billingCycle = billingCycle.toLowerCase();
+      query.billingCycle = String(billingCycle).toLowerCase();
     }
 
-    // Determine sort order
     const sortOrder = order === 'asc' ? 1 : -1;
     const sortOptions = {};
     sortOptions[sortBy] = sortOrder;
 
-    // Fetch subscriptions
     const subscriptions = await Subscription.find(query)
       .sort(sortOptions)
-      .lean(); // Use lean() for better performance
+      .lean();
 
-    // Calculate totals
-    const totalMonthly = subscriptions
-      .filter(sub => sub.billingCycle === 'monthly' && sub.status === 'active')
-      .reduce((sum, sub) => sum + sub.amount, 0);
-
-    const totalYearly = subscriptions
-      .filter(sub => sub.billingCycle === 'yearly' && sub.status === 'active')
-      .reduce((sum, sub) => sum + sub.amount, 0);
-
-    res.status(200).json({
+    return res.status(200).json({
       success: true,
       count: subscriptions.length,
-      summary: {
-        totalMonthly,
-        totalYearly,
-        activeCount: subscriptions.filter(s => s.status === 'active').length
-      },
-      data: subscriptions
+      data: subscriptions,
     });
   } catch (error) {
     console.error('Get subscriptions error:', error);
-    res.status(500).json({
+    return res.status(500).json({
       success: false,
       message: 'Server error while fetching subscriptions',
-      error: error.message
-    });
-  }
-};
-
-/**
- * @desc    Get single subscription by ID
- * @route   GET /api/subscriptions/:id
- * @access  Private
- */
-exports.getSubscriptionById = async (req, res) => {
-  try {
-    const subscription = await Subscription.findOne({
-      _id: req.params.id,
-      userId: req.user._id // Ensure user owns this subscription
-    });
-
-    if (!subscription) {
-      return res.status(404).json({
-        success: false,
-        message: 'Subscription not found'
-      });
-    }
-
-    res.status(200).json({
-      success: true,
-      data: subscription
-    });
-  } catch (error) {
-    console.error('Get subscription error:', error);
-    res.status(500).json({
-      success: false,
-      message: 'Server error',
-      error: error.message
+      error: error.message,
     });
   }
 };
