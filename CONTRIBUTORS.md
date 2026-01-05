@@ -199,3 +199,6 @@ This project exists because of your time, effort, and curiosity.
 - **GitHub** https://github.com/yogesh4216
 - **About** Computer Science–focused student passionate about AI, software development, and building impactful real world projects.
 
+- **Name:** Snehal Sanap  
+- **GitHub:** https://github.com/SnehalSanap0 
+- **About:** I am here to learn about open source contributions.
