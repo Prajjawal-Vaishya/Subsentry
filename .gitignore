@@ -35,3 +35,8 @@
 **/*.bak
 **/*.old
 **/*.map
+
+.worktrees/
+tmp_review/
+tmp_issue_*.md
+opencode_issues_master (1).md

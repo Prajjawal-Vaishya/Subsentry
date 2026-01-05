@@ -194,3 +194,24 @@ This project exists because of your time, effort, and curiosity.
 - **Name:** Ishan Raj Singh
 - **GitHub:** https://github.com/ishanrajsingh 
 - **About:** BTECH at Amity Noida
+
+- **Name:** Utkarsh Pandey  
+- **GitHub:** https://github.com/utkarshp579  
+- **About:** Full-Stack Developer , AI-ML Enthusiast
+
+- **Name:** Yogesh M
+- **GitHub** https://github.com/yogesh4216
+- **About** Computer Science–focused student passionate about AI, software development, and building impactful real world projects.
+
+- **Name:** MANVI MISHRA
+- **GitHub:** https://github.com/manvimishra15 
+- **About:** I m a Btech cse 2nd year student, and I love creating,learning, exploring and connecting with likeminded individuals.
+
+- **Name:** Snehal Sanap  
+- **GitHub:** https://github.com/SnehalSanap0 
+- **About:** I am here to learn about open source contributions.
+
+- **Name:** Abhigyan Tiwari
+- **GitHub:** https://github.com/Abh-igyan
+- **About:** I am a 2nd year CSE student at NIT Silchar. I am a CP, DSA, ML and data science enthusiast and trying to learn new skills as well.
+  I need to be proficient enough in new skills and learn as much of open-source contrbution
