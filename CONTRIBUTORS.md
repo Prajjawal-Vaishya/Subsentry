@@ -83,6 +83,7 @@ Copy-paste this row at the **end of the table** and fill your details:
 | <img src="https://github.com/Sourav-student.png?size=80" width="48" alt="Sourav-student avatar"> | **Sourav Kumar Bera** | I am Sourav Kumar Bera, a B.Tech CSE student with strong interest in web development, problem-solving (DSA). I am here to learn about open source contributions. | [@Sourav-student](https://github.com/Sourav-student) |
 | <img src="https://github.com/ishanrajsingh.png?size=80" width="48" alt="ishanrajsingh avatar"> | **Ishan Raj Singh** | I am Ishan Raj Singh, a B.Tech CSE student with keen interest in web development, problem-solving (DSA). I am here to learn about open source contributions. | [@ishanrajsingh](https://github.com/ishanrajsingh) |
 | <img src="https://github.com/Chithra582.png?size=80" width="48" alt="https://avatars.githubusercontent.com/u/180492492?v=4"> | **Chithra R** | SE student exploring web development, and full-stack projects. | [@Chithra582](https://github.com/Chithra582) |
+| <img src="https://github.com/nirwaniadhau.png?size=80" width="48" alt="nirwaniadhau avatar"> | **Nirwani Adhau** | Computer Science student exploring open source and backend development. | [@nirwaniadhau](https://github.com/nirwaniadhau) |
 
 ---
 
